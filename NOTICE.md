@@ -14,4 +14,6 @@ Documentation and educational prose are separately licensed under the Creative C
 
 See [LICENSE-CONTENT.md](LICENSE-CONTENT.md) for the repository-specific licensing map.
 
+Third-party materials remain subject to their original licenses and copyright terms.
+
 This notice is informational and does not replace or modify either license.

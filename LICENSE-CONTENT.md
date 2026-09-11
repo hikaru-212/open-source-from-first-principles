@@ -39,6 +39,16 @@ Original source: https://github.com/hikaru-212/open-source-from-first-principles
 
 This wording is suggested attribution, not an additional license condition.
 
+## Third-Party Materials
+
+Third-party references, linked resources, quoted materials, and upstream project content remain subject to their respective original licenses and copyright terms.
+
+Unless otherwise noted, CC BY 4.0 applies only to the original educational content created for this repository. Linking to or referencing third-party material does not relicense that material under CC BY 4.0.
+
+第三方引用、連結內容、引述資料與上游專案內容，仍適用其各自原始的授權與著作權條款。
+
+除非另有標示，本 repository 的 CC BY 4.0 僅適用於本專案原創的教材內容；對第三方資料的引用或連結，不代表將該資料重新授權為 CC BY 4.0。
+
 ## Illustrative Snippets in Documentation
 
 Ordinary short illustrative code snippets embedded inside CC BY 4.0 Markdown remain part of the CC BY 4.0 document. This repository does not attempt line-by-line dual licensing of those snippets.
