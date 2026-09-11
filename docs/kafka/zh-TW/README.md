@@ -511,6 +511,18 @@ Kafka 目前以 **JIRA** 追蹤 issue，以 **GitHub** 進行程式碼與 Pull R
 
 ---
 
+## 方法論來源
+
+本教材的 first-principles 教學方法，源自 **Yen-Hua Chen** 在 **Streaming System + Compass** 中長期記錄的工程推理實踐，包括 ADR、postmortem、reasoning notes 與系統設計分析。
+
+Kafka track 並不是將 Compass 的架構直接套用到 Kafka。教材中的推理模式，都再以 Apache Kafka 官方文件、Javadoc、KIP、source code 與 tests 獨立驗證；若兩者的物理機制不相符，相關類比即不採用。
+
+這段 provenance 描述的是本教材 teaching methodology 與 framing 的來源，並不表示 Kafka 的架構或設計源自 Compass。
+
+**Streaming System + Compass** — Yen-Hua Chen\
+Source: [https://github.com/hikaru-212/streaming-system-compass](https://github.com/hikaru-212/streaming-system-compass)\
+Documentation license: CC BY 4.0
+
 ## 作者短註
 
 - 主線刻意省略：KRaft internals、ISR／ELR 細節、完整 transaction protocol、LSO 演算法、Share Consumer、Kafka Streams／Connect、security、schema evolution 與管理操作。

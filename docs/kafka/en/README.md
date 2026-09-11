@@ -511,6 +511,18 @@ If an issue claims that “a Producer timeout causes a duplicate,” what eviden
 
 ---
 
+## Methodology Provenance
+
+The first-principles teaching approach used in this guide grew out of the engineering reasoning documented by **Yen-Hua Chen** in **Streaming System + Compass**, including ADRs, postmortems, reasoning notes, and system-design analysis.
+
+The Kafka track does not directly apply Compass architecture to Kafka. The reasoning patterns used here were independently checked against Apache Kafka documentation, Javadocs, KIPs, source code, and tests; analogies were rejected when the underlying physical mechanisms did not actually match.
+
+This provenance describes the origin of the teaching methodology and framing. It does not imply that Kafka's architecture or design originated from Compass.
+
+**Streaming System + Compass** — Yen-Hua Chen\
+Source: [https://github.com/hikaru-212/streaming-system-compass](https://github.com/hikaru-212/streaming-system-compass)\
+Documentation license: CC BY 4.0
+
 ## Author’s Short Note
 
 - The main path deliberately omits: KRaft internals, ISR/ELR details, the complete transaction protocol, the LSO algorithm, Share Consumer, Kafka Streams/Connect, security, schema evolution, and administrative operations.
