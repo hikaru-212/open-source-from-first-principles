@@ -11,7 +11,8 @@
 | Track | zh-TW | English | 狀態 |
 | --- | --- | --- | --- |
 | Kafka | [閱讀](docs/kafka/zh-TW/README.md) | [Read](docs/kafka/en/README.md) | 審閱用原型 |
-| Ray | [規劃中](docs/ray/zh-TW/README.md) | [Planned](docs/ray/en/README.md) | Planned |
+| Ray | [閱讀](docs/ray/zh-TW/README.md) | [Read](docs/ray/en/README.md) | 審閱用原型 |
+| YuniKorn | 規劃中 | 規劃中 | 規劃中 |
 
 未來的 infrastructure tracks 可以沿用 `docs/` 下相同的語言與內容結構。
 
@@ -34,14 +35,15 @@
 
 本 repository 的教學方法，源自 **Yen-Hua Chen** 在 **Streaming System + Compass** 中長期記錄的工程推理方式。
 
-Kafka track 並不是單純要求 AI 生成一份 Kafka 入門教材，而是先：
+這套方法最早透過 Kafka track 具體發展；Ray track 接著沿用相同流程：
 
-1. 從 Compass 的 ADR、postmortem、reasoning notes 與設計哲學中抽取反覆出現的推理模式；
-2. 再以 Apache Kafka 官方文件、Javadoc、KIP、source code 與 tests 獨立驗證這些推理是否真的適用；
-3. 排除物理機制不同、容易造成誤導的類比；
-4. 最後才把留下來的 reasoning patterns 整理成 first-principles onboarding path。
+1. 建立 Compass-derived reasoning profile；
+2. 獨立驗證每個 project 的實際機制；
+3. 排除物理機制不相符的錯誤類比；
+4. 把 physical problems 整理成有邊界的 guarantees 與 non-guarantees；
+5. 再連到該 project 的文件、source、tests 與 issues。
 
-這不是在主張 Kafka 的設計源自 Compass，而是明確記錄**這套教材 framing 與教學方法的來源**。
+本 repository 正在測試：同一套 first-principles onboarding 方法，能否在獨立驗證各 project 實際機制的前提下，跨不同 infrastructure projects 重複使用。這並不是在主張 Kafka 或 Ray 的 architecture 源自 Compass。
 
 方法論原始來源：[https://github.com/hikaru-212/streaming-system-compass](https://github.com/hikaru-212/streaming-system-compass)
 

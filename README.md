@@ -11,7 +11,8 @@ The goal is to help technically capable newcomers become **Contribution Ready**,
 | Track | zh-TW | English | Status |
 | --- | --- | --- | --- |
 | Kafka | [閱讀](docs/kafka/zh-TW/README.md) | [Read](docs/kafka/en/README.md) | Prototype for Review |
-| Ray | [規劃中](docs/ray/zh-TW/README.md) | [Planned](docs/ray/en/README.md) | Planned |
+| Ray | [閱讀](docs/ray/zh-TW/README.md) | [Read](docs/ray/en/README.md) | Prototype for Review |
+| YuniKorn | Planned | Planned | Planned |
 
 Future infrastructure tracks can follow the same language and content layout under `docs/`.
 
@@ -34,14 +35,15 @@ Each track keeps the main learning path short while connecting bounded guarantee
 
 The teaching approach in this repository grew out of the engineering reasoning documented in **Streaming System + Compass**, created by **Yen-Hua Chen**.
 
-Rather than asking an AI system to generate a conventional tutorial, the initial Kafka track was developed by:
+The methodology was first concretely developed through the Kafka track. The Ray track then applied the same process:
 
-1. extracting recurring reasoning patterns from Compass ADRs, postmortems, reasoning notes, and design philosophy;
-2. independently checking those patterns against Apache Kafka documentation, Javadocs, KIPs, source code, and tests;
-3. rejecting analogies whose physical mechanisms did not actually match Kafka;
-4. turning the surviving reasoning patterns into a first-principles onboarding path.
+1. build a Compass-derived reasoning profile;
+2. independently verify each project's actual mechanisms;
+3. reject analogies whose physical mechanisms do not match;
+4. map physical problems into bounded guarantees and non-guarantees;
+5. connect the result to project-specific documentation, source, tests, and issues.
 
-The goal is not to claim that Kafka's design originated from Compass, but to make the origin of this teaching methodology and framing explicit.
+This repository tests whether one first-principles onboarding methodology can be reused across different infrastructure projects while independently verifying each project's actual mechanisms. It does not claim that Kafka or Ray architecture originated from Compass.
 
 Original methodology source: [https://github.com/hikaru-212/streaming-system-compass](https://github.com/hikaru-212/streaming-system-compass)
 
