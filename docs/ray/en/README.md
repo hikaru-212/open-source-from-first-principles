@@ -22,6 +22,12 @@ Users declare computations and resource requirements; Ray chooses where and on w
 
 Ray does not provide application-level exactly-once external effects, durable business workflow history, or database transaction semantics.
 
+## Opening Question: What Engineering Burden Remains Without Ray?
+
+Suppose a computation must run across CPUs and GPUs on multiple machines, with later work depending on earlier results. Without Ray, custom code or another system still has to answer: who tracks work that has not run yet and selects available resources and workers? Who moves dependencies to where they are needed and tracks who still uses each result? After a worker or node disappears, who determines which work can run again and which state can no longer be recovered?
+
+Carry this question through the guide: which coordination of distributed execution can move into the runtime, and which application state and external effects must we still manage ourselves?
+
 With that positioning in place, Chapter 1 asks: what actually exists after `f.remote()`?
 
 Throughout the guide, we then repeatedly ask:
@@ -542,6 +548,19 @@ You receive an issue claiming that a producer unexpectedly ran twice after node 
 - Placement-group failover → focused failover test → GCS placement-group manager; the #65147 reproduction has not been independently confirmed on 2.58, and PR #65970 remains unmerged
 - #44719: part of the policy layering is verified, but its proposed behavior is not the current contract
 - #64627: the cleanup-path concern has source evidence, but the complete production leak remains unresolved
+
+---
+
+## Closing Synthesis: What Responsibility Does Ray Take Off Our Plate?
+
+Return to the computation spanning multiple machines. Ray takes on the runtime work of coordinating logical work into physical execution attempts, so each application does not have to build its own distributed execution coordinator. We can now connect that responsibility to the mechanisms we examined:
+
+- **Task/actor identity and execution attempts** make work trackable without permanently binding it to one worker process; a task is still not a worker.
+- **Scheduling, logical resources, and dependency readiness** coordinate placement, resource allocation, and the data conditions for execution; scheduled does not mean user code has started, and logical CPUs do not provide hardware isolation.
+- **ObjectRefs, owners, and reference tracking** coordinate result tracking, movement, and lifetime; owner, executor, and byte location remain three distinct roles.
+- **Task retries, actor restarts, and object reconstruction** create new attempts or processes, or rerun producers, under their respective policies and eligibility conditions; they do not continue the failed process's stack or heap or automatically restore business state.
+
+Applications still define computations and resource requirements, persist actor state that must survive, and handle idempotency and transaction semantics for external effects. Operators still supply and manage cluster resources. Taking on the coordination of distributed execution does not make Ray a durable business workflow history or establish exactly-once completion of external business operations.
 
 ---
 

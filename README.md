@@ -20,6 +20,7 @@ Future infrastructure tracks can follow the same language and content layout und
 
 ```text
 Project Positioning
+→ Opening Question
 → Physical Problem
 → Physical Constraint
 → Design Choice
@@ -28,11 +29,14 @@ Project Positioning
 → Non-guarantee
 → Failure Boundary
 → Test / Source / Issue
+→ Closing Synthesis
 ```
 
 Each track keeps the main learning path short while connecting bounded guarantees to the upstream evidence a contributor needs.
 
 **Layer 0 — Project Positioning is mandatory for every current and future track.** Before asking “why is the system designed this way?”, establish its system category, practical problem, owned decision, and non-responsibility boundary in a short introduction. Before first-principles analysis, every track must pass this check: “Can a newcomer explain what this project does in a few sentences before we ask why its mechanisms exist?”
+
+**Every track must also connect an Opening Question to a Closing Synthesis.** After Layer 0, ask: “If we did not use this project, what engineering burden would exist?” After the main path, answer: “Now that we understand the mechanisms, what responsibility does this project actually take off our plate?” Identify work that custom code or another system would need to handle; then connect the reviewed mechanisms to the responsibility they take on and the work that remains with users/operators. This framing is mandatory for future tracks and does not replace technical depth or failure boundaries.
 
 ## Methodology Provenance
 

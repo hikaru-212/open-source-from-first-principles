@@ -31,6 +31,12 @@ Kafka 是以可持久保存、分區的 log（durable partitioned log）為核�
 
 Kafka 負責事件流的持久保存、分區、partition 內排序與交付；它不負責證明 consumer 的外部 database write、HTTP effect 或業務流程已 exactly-once 完成。
 
+## 開場問題：如果不用 Kafka，哪些工程負擔仍然存在？
+
+假設訂單事件持續產生，但庫存、通知與分析系統可能各自變慢、停機或需要重讀資料。若不用 Kafka，這些需求仍須由自行實作或其他系統承擔：事件由誰持久保存？哪些事件必須一起排序？各 consumer 的進度與接手責任放在哪裡？寫入結果不明時，誰辨認 retry，又如何避免把重送誤當成新的業務操作？
+
+先帶著這個問題閱讀：哪些協調工作可以交給共同的事件基礎設施，哪些仍需要應用程式自己提供證據？
+
 有了這個定位，第一章再追問：為什麼 producer 與 consumer 不該必須同時活著？
 
 ---
@@ -482,6 +488,19 @@ Kafka 目前以 **JIRA** 追蹤 issue，以 **GitHub** 進行程式碼與 Pull R
 - Kafka protocol message schemas
 - Broker、storage 與 KRaft controller 的 source topology
 - Integration tests 與 system tests
+
+---
+
+## 收束綜合：Kafka 究竟替我們承擔了什麼責任？
+
+回到開場的訂單事件：Kafka 承擔的是一條可保留、可分區、可重讀的事件流所需的共同協調，讓各應用程式不必各自重做整套 log 基礎設施。現在可以把這項責任對回已讀過的機制：
+
+- **可複製、受 retention 限制的 log** 保存事件，讓 producer 與 consumer 不必同時在線；持久性的邊界仍取決於寫入與複製條件。
+- **Partition** 把必須共同排序的資料放在同一個 ordering domain；它不建立跨 partition 的全域順序。
+- **Consumer group 與 committed offset** 協調 partition 的接手責任並保存恢復位置；位置前進不等於外部工作已完成，接手也不會撤銷舊 consumer 已送出的 effect。
+- **Producer idempotence 與 Kafka transactions** 分別處理符合條件的 protocol retry 去重，以及 Kafka records／consumer offsets 的共同提交；它們不會自動把外部資料庫或 HTTP 操作納入同一個 atomic boundary。
+
+應用程式仍須定義事件的業務意義、key 與所需順序，並設計外部 effect 的冪等性與完成證據；維運者仍須選擇容量、retention 與可靠性設定。理解 Kafka，就是能分清「事件流的保存與協調已交給誰」和「業務結果仍由誰負責」。
 
 ---
 

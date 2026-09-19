@@ -31,6 +31,12 @@ It lets a continuous stream of events outlast a receiver's immediate availabilit
 
 Kafka owns durable storage, partitioning, ordering within each partition, and delivery of the event stream. It does not establish that a consumer's external database write, HTTP effect, or business workflow completed exactly once.
 
+## Opening Question: What Engineering Burden Remains Without Kafka?
+
+Suppose order events keep arriving while inventory, notification, and analytics systems can independently slow down, go offline, or need to reread data. Without Kafka, custom code or another system still has to meet those needs: who durably stores the events? Which events must share an order? Where does each consumer's progress and takeover responsibility live? When a write outcome is unknown, who recognizes a retry, and how do we avoid treating a resend as a new business operation?
+
+Carry this question through the guide: which coordination work can move into shared event infrastructure, and which work still requires evidence from the application?
+
 With that positioning in place, Chapter 1 asks why producers and consumers should not need to be alive at the same time.
 
 ---
@@ -482,6 +488,19 @@ If an issue claims that “a Producer timeout causes a duplicate,” what eviden
 - Kafka protocol message schemas
 - Source topology of the Broker, storage, and KRaft controller
 - Integration tests and system tests
+
+---
+
+## Closing Synthesis: What Responsibility Does Kafka Take Off Our Plate?
+
+Return to the order events from the opening. Kafka takes on the shared coordination needed for a retained, partitioned, rereadable event stream, so each application does not have to rebuild the entire log infrastructure. We can now connect that responsibility to the mechanisms we examined:
+
+- **Replicated logs bounded by retention** retain events so producers and consumers need not be online together; durability remains bounded by the write and replication conditions.
+- **Partitions** place records that need a common order in one ordering domain; they do not establish a global order across partitions.
+- **Consumer groups and committed offsets** coordinate partition takeover and store recovery positions; advancing a position does not prove external work completed, and a takeover does not revoke effects already sent by the old consumer.
+- **Producer idempotence and Kafka transactions** respectively deduplicate eligible protocol retries and jointly commit Kafka records and consumer offsets; they do not automatically include an external database or HTTP operation in that atomic boundary.
+
+Applications still define the business meaning of events, keys, and required ordering, and design idempotency and completion evidence for external effects. Operators still choose capacity, retention, and reliability settings. Understanding Kafka means distinguishing who now owns event retention and coordination from who still owns the business outcome.
 
 ---
 

@@ -22,6 +22,12 @@ Ray 是分散式執行 runtime／framework，讓程式把 task 與有狀態的 a
 
 Ray 不負責 application-level exactly-once external effects、持久化的業務流程歷史，或 database transaction semantics。
 
+## 開場問題：如果不用 Ray，哪些工程負擔仍然存在？
+
+假設一份計算要跨多台機器的 CPU／GPU 執行，後續工作又依賴先前結果。若不用 Ray，自行實作或其他系統仍須處理：誰追蹤尚未執行的工作、選擇可用資源與 worker？誰把相依資料送到需要它的位置、追蹤結果還被誰使用？worker 或 node 消失後，誰判斷哪些工作能重跑，哪些狀態已經無法恢復？
+
+先帶著這個問題閱讀：哪些分散執行的協調可以交給 runtime，哪些 application state 與外部效果仍必須自己管理？
+
 有了這個定位，第一章再問：`f.remote()` 之後，到底存在什麼？
 
 接下來，這份指南反覆追問：
@@ -542,6 +548,19 @@ State API 則是診斷證據。它的結果可能因資料來源不可用、查�
 - placement-group failover → focused failover test → GCS placement-group manager；#65147 的 2.58 reproduction 尚未獨立確認，PR #65970 尚未合併
 - #44719：已確認部分 policy layering，但其提案不是現行契約
 - #64627：cleanup path concern 有 source evidence，完整 production leak 仍 unresolved
+
+---
+
+## 收束綜合：Ray 究竟替我們承擔了什麼責任？
+
+回到開場的跨機器計算：Ray 承擔的是把 logical work 協調成實際執行嘗試的 runtime 工作，讓應用程式不必各自重做整套分散式執行協調機制。現在可以把這項責任對回已讀過的機制：
+
+- **Task／actor identity 與 execution attempt** 讓工作可被追蹤，而不必綁死在一個 worker process 上；task 仍不等於 worker。
+- **Scheduling、logical resources 與 dependency readiness** 協調放置、資源配置與執行前的資料條件；scheduled 不代表 user code 已開始，logical CPU 也不是硬體隔離。
+- **ObjectRef、owner 與 reference tracking** 協調結果的追蹤、搬移與生命週期；owner、executor 與 bytes 所在位置仍是三種不同角色。
+- **Task retry、actor restart 與 object reconstruction** 在各自政策及適用條件下建立新的 attempt、process 或重跑 producer；它們不延續失敗 process 的 stack／heap，也不自動還原業務狀態。
+
+應用程式仍須定義計算與資源需求、保存需要持久化的 actor state，並處理外部 effect 的冪等性與交易語義；維運者仍須供應與管理叢集資源。Ray 接手分散執行的協調，不會因此變成 durable business workflow history，也不會證明外部業務操作 exactly-once 完成。
 
 ---
 
