@@ -23,6 +23,16 @@
 
 Deep Dive 與進階實作細節將留待後續擴充版本補充。
 
+## Kafka 到底是什麼？
+
+Kafka 是以可持久保存、分區的 log（durable partitioned log）為核心的分散式事件串流系統。
+
+它讓持續產生的事件不必依賴收件端即時在線：producer 寫入 records 後，consumer 可在保留期間內，依各 partition 的順序與自己的進度持續讀取，不必與 producer 同時活著。
+
+Kafka 負責事件流的持久保存、分區、partition 內排序與交付；它不負責證明 consumer 的外部 database write、HTTP effect 或業務流程已 exactly-once 完成。
+
+有了這個定位，第一章再追問：為什麼 producer 與 consumer 不該必須同時活著？
+
 ---
 
 # Chapter 1 — Why Kafka?

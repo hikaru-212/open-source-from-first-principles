@@ -14,7 +14,17 @@
 
 `master` 只能作為開發中的證據，不能代表 Ray 2.58.0；GitHub issue 與尚未合併的 PR 也不是公開契約。
 
-這份指南不從「Ray 有哪些產品」開始，而是反覆追問：
+## Ray 到底是什麼？
+
+Ray 是分散式執行 runtime／framework，讓程式把 task 與有狀態的 actor 分散到多台機器的 CPU／GPU 上執行。
+
+使用者宣告要執行的計算與資源需求，Ray 負責選擇在哪裡、由哪個 worker 執行，配置邏輯資源、追蹤結果，並管理 object 的搬移與生命週期；worker／node failure 後，依各自政策與適用條件重試或重建。它解決的是分散執行的協調問題，恢復不代表從中斷處接續。
+
+Ray 不負責 application-level exactly-once external effects、持久化的業務流程歷史，或 database transaction semantics。
+
+有了這個定位，第一章再問：`f.remote()` 之後，到底存在什麼？
+
+接下來，這份指南反覆追問：
 
 > 現在實際存在什麼？誰知道什麼？哪個物理狀態消失了？誰有能力恢復它？
 

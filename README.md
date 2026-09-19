@@ -2,7 +2,7 @@
 
 [English](README.md) | [繁體中文](README.zh-TW.md)
 
-Most onboarding material begins with APIs and terminology. This repository instead starts from physical constraints, failure modes, invariants, and design trade-offs, then connects those ideas to source code, tests, issues, and real contribution workflows.
+Most onboarding material begins with APIs and terminology. This repository starts with project positioning, then reasons from physical constraints, failure modes, invariants, and design trade-offs to source code, tests, issues, and real contribution workflows.
 
 The goal is to help technically capable newcomers become **Contribution Ready**, not merely learn an API.
 
@@ -19,7 +19,8 @@ Future infrastructure tracks can follow the same language and content layout und
 ## Teaching Method
 
 ```text
-Problem
+Project Positioning
+→ Physical Problem
 → Physical Constraint
 → Design Choice
 → Mechanism
@@ -30,6 +31,8 @@ Problem
 ```
 
 Each track keeps the main learning path short while connecting bounded guarantees to the upstream evidence a contributor needs.
+
+**Layer 0 — Project Positioning is mandatory for every current and future track.** Before asking “why is the system designed this way?”, establish its system category, practical problem, owned decision, and non-responsibility boundary in a short introduction. Before first-principles analysis, every track must pass this check: “Can a newcomer explain what this project does in a few sentences before we ask why its mechanisms exist?”
 
 ## Methodology Provenance
 

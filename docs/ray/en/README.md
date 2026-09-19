@@ -14,7 +14,17 @@ This is a teaching prototype, not a complete Ray specification or API manual. If
 
 `master` is evidence about development in progress, not Ray 2.58.0 behavior. GitHub issues and unmerged pull requests are not public contracts either.
 
-Rather than beginning with a list of Ray products, this guide repeatedly asks:
+## What Is Ray?
+
+Ray is a distributed execution runtime/framework that runs tasks and stateful actors across CPUs and GPUs on multiple machines.
+
+Users declare computations and resource requirements; Ray chooses where and on which worker to run them, allocates logical resources, tracks results, and manages object movement and lifetime. After a worker or node failure, it retries or reconstructs work according to the relevant policies and eligibility conditions. It solves the coordination problem of distributed execution; recovery does not mean continuing from the point of interruption.
+
+Ray does not provide application-level exactly-once external effects, durable business workflow history, or database transaction semantics.
+
+With that positioning in place, Chapter 1 asks: what actually exists after `f.remote()`?
+
+Throughout the guide, we then repeatedly ask:
 
 > What physically exists now? Who knows what? Which physical state disappeared? Who can recover it?
 

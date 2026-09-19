@@ -23,6 +23,16 @@ To control the cognitive load for beginners, this document deliberately omits so
 
 Deep Dives and advanced implementation details are reserved for later expanded versions.
 
+## What Is Kafka?
+
+Kafka is a distributed event streaming system built around a durable partitioned log.
+
+It lets a continuous stream of events outlast a receiver's immediate availability: producers write records, and consumers can read them later, within the retention period, in each partition's order and at their own pace. Producers and consumers do not need to be alive at the same time.
+
+Kafka owns durable storage, partitioning, ordering within each partition, and delivery of the event stream. It does not establish that a consumer's external database write, HTTP effect, or business workflow completed exactly once.
+
+With that positioning in place, Chapter 1 asks why producers and consumers should not need to be alive at the same time.
+
 ---
 
 # Chapter 1 — Why Kafka?

@@ -2,7 +2,7 @@
 
 [English](README.md) | [繁體中文](README.zh-TW.md)
 
-多數 onboarding 教材從 API 與術語開始。本 repository 改從物理限制、失敗模式、不變量與設計取捨出發，再把這些概念連到 source code、test、issue 與真實的貢獻流程。
+多數 onboarding 教材從 API 與術語開始。本 repository 先建立專案定位，再從物理限制、失敗模式、不變量與設計取捨出發，連到 source code、test、issue 與真實的貢獻流程。
 
 目標是協助具備技術基礎的新手走向 **Contribution Ready**，而不只是學會 API。
 
@@ -19,7 +19,8 @@
 ## 教學方法
 
 ```text
-問題
+專案定位
+→ 物理問題
 → 物理限制
 → 設計選擇
 → 機制
@@ -30,6 +31,8 @@
 ```
 
 每一條 track 都維持簡短的學習主線，同時把有邊界的 guarantee 連到 contributor 所需的 upstream evidence。
+
+**Layer 0 — 專案定位是所有現有與未來 track 的必要起點。** 在問「系統為什麼這樣設計？」之前，先用短篇幅說清楚：這是哪一類系統、解決什麼實際問題、擁有什麼決策權，以及不負責什麼。進入第一原理分析前，每條 track 都必須通過這項檢查：「新手能否在我們追問機制為何存在之前，先用幾句話解釋這個專案在做什麼？」
 
 ## 方法論來源
 
