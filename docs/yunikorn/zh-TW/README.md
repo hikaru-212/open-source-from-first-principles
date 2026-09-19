@@ -22,9 +22,9 @@ YuniKorn 不負責真正建立 container 或執行 process，也不能單靠 sch
 
 有了這個定位，第一章再追問：到底在分配什麼？
 
-接下來，這份指南追問三件事：
+## 帶著這個問題往下讀
 
-> YuniKorn 為什麼存在？它有權決定什麼？從資源需求到真正進展之間，哪裡可能失敗？
+> 如果沒有 YuniKorn，或沒有另一套負責共享 cluster 資源政策的 scheduler，當多個 application、team、queue 同時競爭有限的 CPU、memory 與其他 cluster capacity 時，誰來決定誰先拿、能拿多少、哪些需求要等待，以及什麼時候要 reclaim 已被占用的資源？
 
 ## 怎麼讀這份指南
 
@@ -513,6 +513,25 @@ Pod UID p-101 被 shim 觀察
 - preemption／release path：core `TestPreemption` → shim release callback → informer completion → core removal
 - fault injection：bind failure、delete failure與 node event 的 bounded oracles
 - #3382 regression opportunity：failed delete 的 re-drive、UID safety 與 lifecycle cancellation
+
+---
+
+## 回到最初的問題：為什麼需要 YuniKorn？
+
+讀完六章後，可以把最初的問題拆成具體的工程責任。即使沒有 YuniKorn，只要共享 cluster 需要這些資源政策，就必須由另一套 scheduler／policy layer 或其他機制承擔：
+
+- 把 applications 組織到多租戶 queue hierarchy，追蹤它們宣告的多維 resource demand，並執行 maximum resource limits。
+- 依 guarantee 與 usage 計算 fair ordering，決定接下來考慮哪些 queues／applications，再檢查每筆 request 是否能在單一 node 上通過 resource 與 predicate 檢查。
+- 透過 reservation 降低大型或受限制 request 持續被插隊、陷入 starvation 的風險；reservation 本身不是 allocation，也不是已空出的實體容量。
+- 在 preemption policy 允許時選擇 victims、記錄 reclaim intent，協調 release feedback，並在 allocation release 後讓 node／queue 等 scheduler accounting 收斂；marked preempted 並不表示 allocation 已 release。
+
+Kubernetes 不需要 YuniKorn 才能執行 Pod，也可以使用其他 scheduler。YuniKorn 提供的是共享 cluster capacity 的特定 policy／accounting layer：把分配順序、資源上限、guarantee baseline、reservation 與 reclaim 流程放在同一套可追蹤的 scheduler model 中。
+
+它不建立 containers、不執行 processes，也不擁有 kubelet／runtime 的實體執行真相。guarantee 不代表 reserved hardware，fairness 不保證完成，preemption decision 不代表 capacity 已回收；即使 scheduler accounting 已收斂，也不能單靠它證明 process 已退出。
+
+> YuniKorn 的價值不是「讓 Pod 能跑」；它替共享 cluster 承擔「有限資源應該如何分配、保護、回收與對帳」的 policy responsibility。
+
+現在如果別人問你：「YuniKorn 和單純把 Pod 放到 node 有什麼不同？」你能否用 2–3 句話回答？
 
 ---
 

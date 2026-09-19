@@ -22,9 +22,9 @@ YuniKorn does not create containers or execute processes. A scheduler decision a
 
 With that positioning in place, Chapter 1 asks: what is actually being allocated?
 
-The guide then pursues three questions:
+## Keep This Question in Mind
 
-> Why does YuniKorn exist? What does it have the authority to decide? What can fail between resource demand and real progress?
+> Without YuniKorn, or another scheduler responsible for shared-cluster resource policy, when applications, teams, and queues compete for finite CPU, memory, and other cluster capacity, who decides who gets resources first, how much they can receive, which requests must wait, and when occupied resources should be reclaimed?
 
 ## How to Read This Guide
 
@@ -513,6 +513,25 @@ Given a Pending Pod, how would you pin the version, confirm Pod/application/allo
 - Preemption/release path: core `TestPreemption` → shim release callback → informer completion → core removal
 - Fault injection: bounded oracles for bind failures, delete failures, and node events
 - #3382 regression opportunity: failed-delete re-drive, UID safety, and lifecycle cancellation
+
+---
+
+## Back to the Opening Question: Why Do We Need YuniKorn?
+
+After six chapters, we can turn the opening question into concrete engineering responsibilities. Even without YuniKorn, if a shared cluster needs these resource policies, another scheduler, policy layer, or mechanism must take responsibility for them:
+
+- Organize applications into a multi-tenant queue hierarchy, track their declared multidimensional resource demand, and enforce maximum resource limits.
+- Calculate guarantee-aware fair ordering from guarantees and usage, decide which queues and applications to consider next, and check whether each request passes resource and predicate checks on a single node.
+- Use reservation to reduce the risk that large or constrained requests are continually overtaken and starve; a reservation is neither an allocation nor physical capacity already freed.
+- Select victims under preemption policy, track reclaim intent, coordinate release feedback, and converge node, queue, and other scheduler accounting after allocation release; marked preempted does not mean the allocation has been released.
+
+Kubernetes does not require YuniKorn to execute Pods and can use another scheduler. YuniKorn provides a particular policy and accounting layer for shared cluster capacity: allocation order, resource limits, guarantee baselines, reservation, and reclamation flows live in one traceable scheduler model.
+
+It does not create containers, execute processes, or own kubelet/runtime truth about physical execution. A guarantee does not mean reserved hardware, fairness does not guarantee completion, and a preemption decision does not mean capacity has been reclaimed. Even converged scheduler accounting cannot by itself prove process exit.
+
+> YuniKorn's value is not making Pods run; it takes responsibility for the policies governing how finite shared cluster resources are allocated, protected, reclaimed, and reconciled.
+
+If someone now asks, “How is YuniKorn different from simply placing Pods on nodes?”, can you answer in 2–3 sentences?
 
 ---
 
